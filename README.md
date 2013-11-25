@@ -61,4 +61,15 @@ Object.getPrototypeOf(child.constructor.prototype).constructor
 //> [Function: Parent]
 ```
 
-## 
+## Notable Features
+* this pattern separates constructor and prototype definition
+* you can choose where or whether to run parent constructor functions by using `Function.prototype.apply`
+* arguments to constructor functions should be named and contained in `options` objects
+* prototypical inheritance is not achieved by instantiating parent constructors
+  * prototype objects' prototypes are set up using `Object.create` to point directly to the parent constructor's prototype
+  * prototype defintitions get good results, but need to be described with a verbose properties descriptor object
+(due to the way `Object.create` is implemented)
+* using `Object.create` to build prototype objects breaks the standard implementation of `Object.prototype.constructor`,
+so it is necessary to patch up the `constructor` property of each prototype object manually
+  * `writable`, `enumerable`, and `configurable` will default to `false` when defining the `constructor` property within
+a prototype's properties defifition object
