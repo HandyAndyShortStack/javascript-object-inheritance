@@ -1,6 +1,6 @@
 # Andy's Object Inheritance Pattern for JavaScript
 Ever since I began coding javascript, I have had a difficult time achieving clean object inheritance.  My requirements:
-* inherited ititialization functions with arguments
+* inherited initialization functions with arguments
 * `prototype` and `constructor` properties pointed to their proper places
 * easy control over the prototype chain
 * control over the enumerability of prototype properties
