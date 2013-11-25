@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Javascript-object-inheritance by HandyAndyShortStack</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Javascript-object-inheritance</h1>
+        <p>Proposed pattern for object design and inheritance using ES5 javascript</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/HandyAndyShortStack/javascript-object-inheritance" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/HandyAndyShortStack/javascript-object-inheritance/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/HandyAndyShortStack/javascript-object-inheritance/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1>
+<a name="andys-object-inheritance-pattern-for-javascript" class="anchor" href="#andys-object-inheritance-pattern-for-javascript"><span class="octicon octicon-link"></span></a>Andy's Object Inheritance Pattern for JavaScript</h1>
+
+<p>Ever since I began coding javascript, I have had a difficult time achieving clean object inheritance.  My requirements:</p>
+
+<ul>
+<li>inherited initialization functions with arguments</li>
+<li>
+<code>prototype</code> and <code>constructor</code> properties pointed to their proper places</li>
+<li>easy control over the prototype chain</li>
+<li>control over the enumerability of prototype properties</li>
+</ul><p>My current pattern fulfills these requirements to my satisfaction:</p>
+
+<h2>
+<a name="definition" class="anchor" href="#definition"><span class="octicon octicon-link"></span></a>Definition</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">function</span> <span class="nx">Parent</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">parentConstructorProperty</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">parentConstructorProperty</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">Parent</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="nx">Parent</span>
+  <span class="p">},</span>
+  <span class="nx">parentPrototypeProperty</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s1">'parent prototype value'</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">function</span> <span class="nx">Child</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">Parent</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">childConstructorProperty</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">childConstructorProperty</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">Child</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">Parent</span><span class="p">.</span><span class="nx">prototype</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="nx">Child</span>
+  <span class="p">},</span>
+  <span class="nx">childPrototypeProperty</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="s1">'child prototype value'</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="instantiation" class="anchor" href="#instantiation"><span class="octicon octicon-link"></span></a>Instantiation</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Child</span><span class="p">({</span>
+  <span class="nx">parentConstructorProperty</span><span class="o">:</span> <span class="s1">'parent constructor value'</span><span class="p">,</span>
+  <span class="nx">childConstructorProperty</span><span class="o">:</span> <span class="s1">'child constructor value'</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="testing" class="anchor" href="#testing"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">child</span><span class="p">.</span><span class="nx">parentConstructorProperty</span>
+<span class="c1">//&gt; 'parent constructor value'</span>
+<span class="nx">child</span><span class="p">.</span><span class="nx">childConstructorProperty</span>
+<span class="c1">//&gt; 'child constructor value'</span>
+<span class="nx">child</span><span class="p">.</span><span class="nx">parentPrototypeProperty</span>
+<span class="c1">//&gt; 'parent prototype value'</span>
+<span class="nx">child</span><span class="p">.</span><span class="nx">childPrototypeProperty</span>
+<span class="c1">//&gt; 'child prototype value'</span>
+<span class="nx">child</span><span class="p">.</span><span class="nx">constructor</span>
+<span class="c1">//&gt; [Function: Child]</span>
+<span class="nb">Object</span><span class="p">.</span><span class="nx">getPrototypeOf</span><span class="p">(</span><span class="nx">child</span><span class="p">.</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">).</span><span class="nx">constructor</span>
+<span class="c1">//&gt; [Function: Parent]</span>
+</pre></div>
+
+<h2>
+<a name="notable-features" class="anchor" href="#notable-features"><span class="octicon octicon-link"></span></a>Notable Features</h2>
+
+<ul>
+<li>this pattern separates constructor and prototype definition</li>
+<li>you can choose where or whether to run parent constructor functions by using <code>Function.prototype.apply</code>
+</li>
+<li>arguments to constructor functions should be named and contained in <code>options</code> objects</li>
+<li>prototypical inheritance is not achieved by instantiating parent constructors
+
+<ul>
+<li>prototype objects' prototypes are set up using <code>Object.create</code> to point directly to the parent constructor's prototype</li>
+<li>prototype defintitions get good results, but need to be described with a verbose properties descriptor object
+(due to the way <code>Object.create</code> is implemented)</li>
+<li>
+<code>writable</code>, <code>enumerable</code>, and <code>configurable</code> will default to <code>false</code> when defining a property within
+a prototype's properties defifition object</li>
+</ul>
+</li>
+<li>using <code>Object.create</code> to build prototype objects breaks the standard implementation of <code>Object.prototype.constructor</code>,
+so it is necessary to patch up the <code>constructor</code> property of each prototype object manually</li>
+</ul>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/HandyAndyShortStack">HandyAndyShortStack</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
