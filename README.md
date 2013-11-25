@@ -17,8 +17,7 @@ Parent.prototype = Object.create(null, {
     value: Parent
   },
   parentPrototypeProperty: {
-    value: 'parent prototype value',
-    enumerable: false
+    value: 'parent prototype value'
   }
 });
 
@@ -31,8 +30,7 @@ Child.prototype = Object.create(Parent.prototype, {
     value: Child
   },
   childPrototypeProperty: {
-    value: 'child prototype value',
-    enumerable: false
+    value: 'child prototype value'
   }
 });
 ```
@@ -69,7 +67,7 @@ Object.getPrototypeOf(child.constructor.prototype).constructor
   * prototype objects' prototypes are set up using `Object.create` to point directly to the parent constructor's prototype
   * prototype defintitions get good results, but need to be described with a verbose properties descriptor object
 (due to the way `Object.create` is implemented)
+  * `writable`, `enumerable`, and `configurable` will default to `false` when defining a property within
+a prototype's properties defifition object
 * using `Object.create` to build prototype objects breaks the standard implementation of `Object.prototype.constructor`,
 so it is necessary to patch up the `constructor` property of each prototype object manually
-  * `writable`, `enumerable`, and `configurable` will default to `false` when defining the `constructor` property within
-a prototype's properties defifition object
